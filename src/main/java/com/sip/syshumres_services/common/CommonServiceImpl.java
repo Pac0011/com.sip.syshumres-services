@@ -41,7 +41,7 @@ public class CommonServiceImpl<E, R extends PagingAndSortingRepository<E, Long>>
 
 	@Override
 	@Transactional
-	public E create(E entity) {
+	public E save(E entity) {
 		return repository.save(entity);
 	}
 

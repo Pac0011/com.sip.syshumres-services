@@ -22,12 +22,22 @@
 		<artifactId>spring-boot-starter-test</artifactId>
 		<scope>test</scope>
 	</dependency>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-security</artifactId>
+	</dependency>
     
     <dependency>
 	    <artifactId>syshumres-repositories</artifactId>
 	    <groupId>com.sip</groupId>
 	    <version>0.0.1-SNAPSHOT</version>
     </dependency>
+    <dependency>
+	    <artifactId>syshumres-utils</artifactId>
+	    <groupId>com.sip</groupId>
+	    <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    
   </dependencies>
   
   <properties>

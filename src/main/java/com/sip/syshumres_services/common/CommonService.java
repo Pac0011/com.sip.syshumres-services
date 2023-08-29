@@ -22,7 +22,7 @@ public interface CommonService<E> {
 	
 	public Optional<E> findById(Long id);
 	
-	public E create(E entity);
+	public E save(E entity);
 	
 	public void deleteById(Long id);
 
