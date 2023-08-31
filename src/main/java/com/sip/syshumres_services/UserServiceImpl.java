@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,9 +24,6 @@ import com.sip.syshumres_utils.StringTrim;
 
 @Service
 public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> implements UserService {
-	
-	@Value("${SESSION.USER.NAME}")
-	private String sessionUserName;
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -90,20 +86,19 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 	
 	@Override
 	public boolean validUserPassword(String passOld, String passSession) {
-		BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
 		//System.out.println("passOld: " + passOld);
 		//System.out.println("userSession.getPassword(): " + userSession.getPassword());
 		//System.out.println("Res: " + bc.matches(passOld, userSession.getPassword()));
-		return bc.matches(passOld, passSession);
+		return new BCryptPasswordEncoder().matches(passOld, passSession);
 	}
 	
 	@Override
-	public HttpSession logout(HttpSession session) {
+	public HttpSession logout(HttpSession session, String sessionUserName) {
 		SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.setInvalidateHttpSession(true);        
         SecurityContextHolder.clearContext();
         
-        session.setAttribute(this.sessionUserName, "");
+        session.setAttribute(sessionUserName, "");
         session.invalidate();
         
         return session;

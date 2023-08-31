@@ -36,7 +36,7 @@ public interface UserService extends CommonService<User> {
     
     boolean validUserPassword(String passOld, String passSession);
     
-    HttpSession logout(HttpSession session);
+    HttpSession logout(HttpSession session, String sessionUserName);
     
     User assignAuthorities(User entity, List<Authority> authorities);
     
