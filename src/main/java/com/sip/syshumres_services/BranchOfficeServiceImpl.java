@@ -44,7 +44,7 @@ public class BranchOfficeServiceImpl implements BranchOfficeService {
 
 	@Override
 	@Transactional
-	public BranchOffice create(BranchOffice entity) {
+	public BranchOffice save(BranchOffice entity) {
 		return repository.save(entity);
 	}
 

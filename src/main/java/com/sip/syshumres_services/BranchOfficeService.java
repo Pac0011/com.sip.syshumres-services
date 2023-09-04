@@ -20,7 +20,7 @@ public interface BranchOfficeService {
 	
 	Optional<BranchOffice> findById(Long id);
 	
-	BranchOffice create(BranchOffice entity);
+	BranchOffice save(BranchOffice entity);
 	
 	void deleteById(Long id);
 	
