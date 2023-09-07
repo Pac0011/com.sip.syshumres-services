@@ -34,6 +34,12 @@
 	    <groupId>com.sip</groupId>
 	    <version>0.0.1-SNAPSHOT</version>
     </dependency>
+    <!-- Exceptions -->
+    <dependency>
+	    <artifactId>syshumres-exceptions</artifactId>
+	    <groupId>com.sip</groupId>
+	    <version>0.0.1-SNAPSHOT</version>
+    </dependency>
   </dependencies>
   
   <properties>
