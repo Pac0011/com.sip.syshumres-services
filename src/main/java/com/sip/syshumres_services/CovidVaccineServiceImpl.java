@@ -13,6 +13,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 @Service
 public class CovidVaccineServiceImpl extends CommonServiceImpl<CovidVaccine, CovidVaccineRepository> implements CovidVaccineService {
 	
+	@Override
 	@Transactional(readOnly = true)
 	public List<CovidVaccine> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

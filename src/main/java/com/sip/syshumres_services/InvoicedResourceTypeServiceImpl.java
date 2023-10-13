@@ -14,6 +14,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 public class InvoicedResourceTypeServiceImpl extends CommonServiceImpl<InvoicedResourceType, 
 	InvoicedResourceTypeRepository> implements InvoicedResourceTypeService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<InvoicedResourceType> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

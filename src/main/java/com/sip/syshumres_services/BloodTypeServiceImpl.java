@@ -12,6 +12,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 @Service
 public class BloodTypeServiceImpl extends CommonServiceImpl<BloodType, BloodTypeRepository> implements BloodTypeService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<BloodType> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

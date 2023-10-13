@@ -13,6 +13,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 @Service
 public class DinningRoomServiceImpl extends CommonServiceImpl<DinningRoom, DinningRoomRepository> implements DinningRoomService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<DinningRoom> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

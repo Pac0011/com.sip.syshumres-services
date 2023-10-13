@@ -14,6 +14,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 public class ReasonQuitJobServiceImpl extends CommonServiceImpl<ReasonQuitJob, ReasonQuitJobRepository> 
 	implements ReasonQuitJobService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<ReasonQuitJob> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

@@ -29,9 +29,9 @@ import com.sip.syshumres_utils.UtilFile;
 public class EmployeeDocumentServiceImpl extends CommonServiceImpl<EmployeeDocument, EmployeeDocumentRepository> 
 	implements EmployeeDocumentService {
 
-	private EmployeeProfileRepository repositoryE;
+	private final EmployeeProfileRepository repositoryE;
 	
-	private HiringDocumentsRepository repositoryH;
+	private final HiringDocumentsRepository repositoryH;
 	
 	@Value("${UPLOAD.BASE.DOCUMENTS.EMPLOYEES}")
 	private String uploadBaseDocuments;
@@ -48,7 +48,8 @@ public class EmployeeDocumentServiceImpl extends CommonServiceImpl<EmployeeDocum
 	private String uploadFormatsAllow;
 	
 	@Autowired
-	public EmployeeDocumentServiceImpl(EmployeeProfileRepository repositoryE, HiringDocumentsRepository repositoryH) {
+	public EmployeeDocumentServiceImpl(EmployeeProfileRepository repositoryE, 
+			HiringDocumentsRepository repositoryH) {
 		super();
 		this.repositoryE = repositoryE;
 		this.repositoryH = repositoryH;
@@ -61,6 +62,7 @@ public class EmployeeDocumentServiceImpl extends CommonServiceImpl<EmployeeDocum
 	}	
 	
 	@Override
+	@Transactional
 	public Map<String, Object> uploadFile(Long idEmployeeProfile, Long idHiringDocument, MultipartFile fileUpload) 
 			throws UploadFormatsAllowException, EntityIdNotFoundException, TypeHiringDocumentNotExistException, CreateRegisterException {
 		EmployeeDocument c = null;

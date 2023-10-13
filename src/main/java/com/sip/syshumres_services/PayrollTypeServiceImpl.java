@@ -14,11 +14,13 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 public class PayrollTypeServiceImpl extends CommonServiceImpl<PayrollType, PayrollTypeRepository> 
 	implements PayrollTypeService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<PayrollType> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();
 	}
 	
+	@Override
 	@Transactional(readOnly = true)
 	public List<PayrollType> findNormalByEnabledTrueOrderByDescription() {
 		return repository.findNormalByEnabledTrueOrderByDescription();

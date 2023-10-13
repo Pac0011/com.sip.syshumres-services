@@ -14,6 +14,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 public class HiringDocumentsTypeServiceImpl extends CommonServiceImpl<HiringDocumentsType, HiringDocumentsTypeRepository> 
     implements HiringDocumentsTypeService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<HiringDocumentsType> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

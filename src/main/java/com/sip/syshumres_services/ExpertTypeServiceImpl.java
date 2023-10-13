@@ -14,7 +14,8 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 public class ExpertTypeServiceImpl extends CommonServiceImpl<ExpertType, ExpertTypeRepository> 
 	implements ExpertTypeService {
 
-    @Transactional(readOnly = true)
+	@Override
+	@Transactional(readOnly = true)
     public List<ExpertType> findByEnabledTrueOrderByDescription() {
 	    return repository.findByEnabledTrueOrderByDescription();
     }

@@ -13,6 +13,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 @Service
 public class EmployeeBankServiceImpl extends CommonServiceImpl<EmployeeBank, EmployeeBankRepository> implements EmployeeBankService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<EmployeeBank> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

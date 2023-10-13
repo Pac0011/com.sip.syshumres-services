@@ -17,7 +17,7 @@ import com.sip.syshumres_repositories.BranchOfficeRepository;
 @Service
 public class BranchOfficeServiceImpl implements BranchOfficeService {
 	
-	private BranchOfficeRepository repository;
+	private final BranchOfficeRepository repository;
 
 	@Autowired
 	public BranchOfficeServiceImpl(BranchOfficeRepository repository) {

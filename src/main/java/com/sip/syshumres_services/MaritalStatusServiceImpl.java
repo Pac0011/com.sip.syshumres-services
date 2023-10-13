@@ -13,6 +13,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 @Service
 public class MaritalStatusServiceImpl extends CommonServiceImpl<MaritalStatus, MaritalStatusRepository> implements MaritalStatusService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<MaritalStatus> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

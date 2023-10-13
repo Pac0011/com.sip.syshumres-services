@@ -14,6 +14,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 public class AddressStateServiceImpl extends CommonServiceImpl<AddressState, AddressStateRepository> 
     implements AddressStateService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<AddressState> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

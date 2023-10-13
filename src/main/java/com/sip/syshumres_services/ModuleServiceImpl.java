@@ -14,6 +14,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 @Service
 public class ModuleServiceImpl extends CommonServiceImpl<Module, ModuleRepository> implements ModuleService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<Module> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();
@@ -25,8 +26,8 @@ public class ModuleServiceImpl extends CommonServiceImpl<Module, ModuleRepositor
 		return repository.findByDescriptionLikeOrUrlLikeOrDetail(text, pageable);
 	}
 	
-	@Transactional(readOnly = true)
 	@Override
+	@Transactional(readOnly = true)
 	public Page<Module> findByFilterSession(String filter, Pageable pageable) {
 		
 		if (filter != null && filter != "") {

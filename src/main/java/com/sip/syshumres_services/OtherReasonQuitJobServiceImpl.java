@@ -15,12 +15,13 @@ public class OtherReasonQuitJobServiceImpl extends CommonServiceImpl<OtherReason
 	OtherReasonQuitJobRepository> implements OtherReasonQuitJobService {
 
 	@Override
+	@Transactional(readOnly = true)
 	public Page<OtherReasonQuitJob> findByDescriptionLike(String text, Pageable pageable) {
 		return repository.findByDescriptionLike(text, pageable);
 	}
 
-	@Transactional(readOnly = true)
 	@Override
+	@Transactional(readOnly = true)
 	public Page<OtherReasonQuitJob> findByFilterSession(String filter, Pageable pageable) {
 		
 		if (filter != null && filter != "") {

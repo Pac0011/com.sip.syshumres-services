@@ -30,7 +30,7 @@ import com.sip.syshumres_utils.RandomString;
 public class ProspectProfileServiceImpl extends CommonServiceImpl<ProspectProfile, ProspectProfileRepository> 
 implements ProspectProfileService {
 	
-	private EmployeeProfileRepository repositoryE;
+	private final EmployeeProfileRepository repositoryE;
 	
 	@Value("${SIZE.HASH.DIR.UPLOAD.EMPLOYEE}")
 	private int sizeHashDirUploadEmployee;
@@ -141,6 +141,7 @@ implements ProspectProfileService {
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public void validEntity(ProspectProfile entity, Long id) 
 			throws ProspectFieldsAlreadyExistException, EmployeeFieldsAlreadyExistException {
 		//valid email repeat

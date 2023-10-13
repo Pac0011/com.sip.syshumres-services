@@ -14,6 +14,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 public class TypeHiringServiceImpl extends CommonServiceImpl<TypeHiring, TypeHiringRepository> 
 	implements TypeHiringService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<TypeHiring> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

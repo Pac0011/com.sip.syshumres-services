@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sip.syshumres_entities.PasswordRecovery;
 
@@ -17,7 +16,7 @@ import com.sip.syshumres_entities.PasswordRecovery;
 @Service
 public class EmailServiceImpl implements EmailService {
 	
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 	
 	@Value("${EMAIL.FROM}")
 	private String from;
@@ -30,7 +29,6 @@ public class EmailServiceImpl implements EmailService {
 		this.mailSender = mailSender;
 	}
 
-	@Transactional(readOnly = true)
 	@Override
     public void sendEmail(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -41,7 +39,6 @@ public class EmailServiceImpl implements EmailService {
         mailSender.send(message);
     }
     
-	@Transactional(readOnly = true)
 	@Override
     public void sendHtmlEmail(String to, String subject, String body) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
@@ -54,7 +51,6 @@ public class EmailServiceImpl implements EmailService {
         mailSender.send(message);
     }
 	
-	@Transactional(readOnly = true)
 	@Override
     public String sendHtmlEmailRecoveryPassword(String to, String subject, PasswordRecovery entity) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();

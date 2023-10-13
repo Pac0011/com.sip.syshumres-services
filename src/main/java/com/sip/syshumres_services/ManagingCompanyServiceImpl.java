@@ -34,6 +34,7 @@ public class ManagingCompanyServiceImpl extends CommonServiceImpl<ManagingCompan
 	}
 	
 	@Override
+	@Transactional
 	public ManagingCompany assignBranchOffices(ManagingCompany entity, List<BranchOffice> branchOffices) {
 		
 		branchOffices.forEach(m -> {
@@ -44,6 +45,7 @@ public class ManagingCompanyServiceImpl extends CommonServiceImpl<ManagingCompan
 	}
 	
 	@Override
+	@Transactional
 	public ManagingCompany removeBranchOffice(ManagingCompany entity, BranchOffice branchOffice) {
 		
 		entity.removeBranchOffice(branchOffice);

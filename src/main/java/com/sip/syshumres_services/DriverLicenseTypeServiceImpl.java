@@ -13,6 +13,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 @Service
 public class DriverLicenseTypeServiceImpl extends CommonServiceImpl<DriverLicenseType, DriverLicenseTypeRepository> implements DriverLicenseTypeService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<DriverLicenseType> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

@@ -15,10 +15,12 @@ public class BranchOfficeTypeServiceImpl extends CommonServiceImpl<BranchOfficeT
     implements BranchOfficeTypeService {
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<BranchOfficeType> findByDescription(String term) {
 		return repository.findByDescription(term);
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<BranchOfficeType> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

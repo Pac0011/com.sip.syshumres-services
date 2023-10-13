@@ -14,6 +14,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 public class ProspectStatusServiceImpl extends CommonServiceImpl<ProspectStatus, ProspectStatusRepository> 
   implements ProspectStatusService {
 	
+	@Override
 	@Transactional(readOnly = true)
 	public List<ProspectStatus> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

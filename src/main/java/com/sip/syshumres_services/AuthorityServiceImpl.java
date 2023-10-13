@@ -76,6 +76,7 @@ public class AuthorityServiceImpl extends CommonServiceImpl<Authority, Authority
 	}
 	
 	@Override
+	@Transactional
 	public Authority assignModules(Authority entity, List<Module> modules) {
 		
 		modules.forEach(m -> {
@@ -86,6 +87,7 @@ public class AuthorityServiceImpl extends CommonServiceImpl<Authority, Authority
 	}
 	
 	@Override
+	@Transactional
 	public Authority removeModule(Authority entity, Module module) {
 		
 		entity.removeModule(module);

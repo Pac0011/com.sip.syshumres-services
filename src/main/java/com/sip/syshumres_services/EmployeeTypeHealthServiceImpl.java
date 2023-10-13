@@ -14,6 +14,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 public class EmployeeTypeHealthServiceImpl extends CommonServiceImpl<EmployeeTypeHealth, EmployeeTypeHealthRepository> 
     implements EmployeeTypeHealthService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<EmployeeTypeHealth> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

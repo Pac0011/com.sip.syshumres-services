@@ -23,6 +23,7 @@ public class PasswordRecoveryServiceImpl extends CommonServiceImpl<PasswordRecov
 	}
 	
 	@Override
+	@Transactional
 	public PasswordRecovery savePasswordRecovery(String email) {
 		PasswordRecovery r = new PasswordRecovery();
 		r.setEmail(email);
@@ -32,7 +33,6 @@ public class PasswordRecoveryServiceImpl extends CommonServiceImpl<PasswordRecov
 		return repository.save(r);
 	}
 	
-	@Transactional(readOnly = true)
 	@Override
 	public boolean expirationLinkRecovery(PasswordRecovery entity) {
 		Date today = new Date();

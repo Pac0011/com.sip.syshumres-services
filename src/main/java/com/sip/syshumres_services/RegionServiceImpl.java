@@ -13,6 +13,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 @Service
 public class RegionServiceImpl extends CommonServiceImpl<Region, RegionRepository> implements RegionService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<Region> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

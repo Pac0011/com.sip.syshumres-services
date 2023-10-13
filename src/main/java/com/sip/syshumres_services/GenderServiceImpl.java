@@ -13,6 +13,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 @Service
 public class GenderServiceImpl extends CommonServiceImpl<Gender, GenderRepository> implements GenderService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<Gender> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

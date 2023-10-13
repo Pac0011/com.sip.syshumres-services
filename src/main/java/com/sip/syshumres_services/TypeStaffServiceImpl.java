@@ -14,6 +14,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 public class TypeStaffServiceImpl extends CommonServiceImpl<TypeStaff, TypeStaffRepository> 
 	implements TypeStaffService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<TypeStaff> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

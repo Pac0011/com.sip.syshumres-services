@@ -13,6 +13,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 public class DriverLicenseValidityServiceImpl extends CommonServiceImpl<DriverLicenseValidity, DriverLicenseValidityRepository> 
 implements DriverLicenseValidityService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<DriverLicenseValidity> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

@@ -14,6 +14,7 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 public class SchoolGradeServiceImpl extends CommonServiceImpl<SchoolGrade, SchoolGradeRepository> 
     implements SchoolGradeService {
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<SchoolGrade> findByEnabledTrueOrderByDescription() {
 		return repository.findByEnabledTrueOrderByDescription();

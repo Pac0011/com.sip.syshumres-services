@@ -64,67 +64,80 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public Page<EmployeeProfile> listEmployeeType(Long idBranchOffice, Long id, Pageable pageable) {
 		return repository.listEmployeeType(idBranchOffice, id, pageable);
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public Page<EmployeeProfile> listEmployeeType(Long id, Pageable pageable) {
 		return repository.listEmployeeType(id, pageable);
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public long countByEmailWithAnotherEmployee(String email, Long id) {
 		return repository.countByEmailWithAnotherEmployee(email, id);
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public long countByCurpWithAnotherEmployee(String curp, Long id) {
 		return repository.countByCurpWithAnotherEmployee(curp, id);
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public long countByNssWithAnotherEmployee(String nss, Long id) {
 		return repository.countByNssWithAnotherEmployee(nss, id);
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public long countByRfcWithAnotherEmployee(String rfc, Long id) {
 		return repository.countByRfcWithAnotherEmployee(rfc, id);
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
     public long countByBankAccountWithAnotherEmployee(String bankAccount, Long id) {
     	return repository.countByBankAccountWithAnotherEmployee(bankAccount, id);
     }
 	
 	@Override
+	@Transactional(readOnly = true)
 	public long countByClabeWithAnotherEmployee(String clabe, Long id) {
 		return repository.countByClabeWithAnotherEmployee(clabe, id);
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public long countByNameAnotherEmployee(String lastName, String lastNameSecond) {
 		return repository.countByNameAnotherEmployee(lastName, lastNameSecond);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Optional<EmployeeProfile> findByIdEmployeeClinicalData(Long id) {
 		return repository.findByIdEmployeeClinicalData(id);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Optional<EmployeeProfile> findByIdEmployeePayroll(Long id) {
 		return repository.findByIdEmployeePayroll(id);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Page<EmployeeProfile> findByFullNameLikeOrRfcLikeOrCurpLikeOr(Long idBranchOffice, Long idEmployeeType, String text,
 			Pageable pageable) {
 		return repository.findByFullNameLikeOrRfcLikeOrCurpLikeOr(idBranchOffice, idEmployeeType, text, pageable);
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public Page<EmployeeProfile> findByFullNameLikeOrRfcLikeOrCurpLikeOr(Long idEmployeeType, String text,
 			Pageable pageable) {
 		return repository.findByFullNameLikeOrRfcLikeOrCurpLikeOr(idEmployeeType, text, pageable);
@@ -157,6 +170,7 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 	}
 	
 	@Override
+	@Transactional
 	public Map<String, Object> uploadFile(Long id, String nameInput, MultipartFile fileUpload) 
 			throws EntityIdNotFoundException, UploadFormatsAllowException, UploadFileException, 
 			UnknownOptionException, CreateRegisterException {		
@@ -278,6 +292,8 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 		return resource;
 	}
 	
+	@Override
+	@Transactional(readOnly = true)
 	public Map<String, Object> validEntity(EmployeeProfile entity, Long id) {
 		//valid email repeat
 		if (repository.countByEmailWithAnotherEmployee(entity.getEmail(), id) > 0) {

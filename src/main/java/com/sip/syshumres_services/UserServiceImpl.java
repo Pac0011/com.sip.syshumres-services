@@ -32,6 +32,7 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Optional<User> findOneByEmail(String email) {
 		return repository.findOneByEmail(email);
 	}
@@ -78,6 +79,7 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 	}
 	
 	@Override
+	@Transactional
 	public User saveNewPassword(User entity, String newPass) {
 		entity.setPassword(this.encrypPassword(newPass));
 		
@@ -105,6 +107,7 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 	}
 	
 	@Override
+	@Transactional
     public User assignAuthorities(User entity, List<Authority> authorities) {
 		authorities.forEach(m -> {
 			entity.addAuthority(m);
@@ -114,6 +117,7 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 	}
     
 	@Override
+	@Transactional
 	public User removeAuthority(User entity, Authority authority) {
 		
 		entity.removeAuthority(authority);
@@ -122,6 +126,7 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public Map<String, Object> validEntity(User entity, Long id) {
         //valid email
         if (repository.countByEmailWithAnotherUser(entity.getEmail(), id) > 0) {

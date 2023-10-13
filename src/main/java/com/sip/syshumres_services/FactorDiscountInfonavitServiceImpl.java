@@ -14,7 +14,8 @@ import com.sip.syshumres_services.common.CommonServiceImpl;
 public class FactorDiscountInfonavitServiceImpl extends CommonServiceImpl<FactorDiscountInfonavit, 
 	FactorDiscountInfonavitRepository> implements FactorDiscountInfonavitService {
 
-    @Transactional(readOnly = true)
+	@Override
+	@Transactional(readOnly = true)
     public List<FactorDiscountInfonavit> findByEnabledTrueOrderByDescription() {
 	    return repository.findByEnabledTrueOrderByDescription();
     }
