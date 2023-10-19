@@ -38,7 +38,7 @@ public class EmployeePositionServiceImpl extends CommonServiceImpl<EmployeePosit
 	@Override
 	public Page<EmployeePosition> findByFilterSession(String filter, Pageable pageable) {
 		
-		if (filter != null && filter != "") {
+		if (filter != null && !filter.equals("")) {
 			return repository.findByDescriptionLikeOrEmployeeTypeLike(filter, pageable);
 		}
 		

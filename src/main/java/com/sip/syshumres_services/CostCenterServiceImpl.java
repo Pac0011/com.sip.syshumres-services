@@ -32,7 +32,7 @@ public class CostCenterServiceImpl extends CommonServiceImpl<CostCenter, CostCen
 	@Override
 	public Page<CostCenter> findByFilterSession(String filter, Pageable pageable) {
 		
-		if (filter != null && filter != "") {
+		if (filter != null && !filter.equals("")) {
 			return repository.findByDescriptionLikeOrCodeLike(filter, pageable);
 		} 
 		

@@ -12,7 +12,6 @@ public interface ModuleService extends CommonService<Module> {
 
 	List<Module> findByEnabledTrueOrderByDescription();
 	
-	//Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
     Page<Module> findByDescriptionLikeOrUrlLikeOrDetailLike(String text, Pageable pageable);
     
     Page<Module> findByFilterSession(String filter, Pageable pageable);

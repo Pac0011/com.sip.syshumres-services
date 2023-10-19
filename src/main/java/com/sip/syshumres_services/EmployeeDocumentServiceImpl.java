@@ -73,16 +73,16 @@ public class EmployeeDocumentServiceImpl extends CommonServiceImpl<EmployeeDocum
 				throw new UploadFormatsAllowException("y es (" + contentType + ")");
 			}
 			Optional<EmployeeProfile> o = this.repositoryE.findById(idEmployeeProfile);
-			if (o == null || !o.isPresent()) {
+			if (!o.isPresent()) {
 				throw new EntityIdNotFoundException("Error al guardar documento, no existe id empleado " + idEmployeeProfile);
 			}
 			EmployeeProfile e = o.get();
 			String newNameFile = UtilFile.saveFile(fileUpload, this.uploadDocuments + e.getEcript() + File.separator);
 			urlFile.append(e.getEcript()).append(File.separator).append(newNameFile);
 			Optional<EmployeeDocument> o2 = repository.findByEmployeeProfileAndHiringDocument(idEmployeeProfile, idHiringDocument);
-			if (o2 == null || !o2.isPresent()) {
+			if (!o2.isPresent()) {
 				Optional<HiringDocuments> o3 = this.repositoryH.findById(idHiringDocument);
-				if (o3 == null || !o3.isPresent()) {
+				if (!o3.isPresent()) {
 					throw new TypeHiringDocumentNotExistException("Error al guardar documento, no existe el tipo de documento de contratacion " + idHiringDocument);
 				}
 				c = new EmployeeDocument();
@@ -94,7 +94,13 @@ public class EmployeeDocumentServiceImpl extends CommonServiceImpl<EmployeeDocum
 				c.setDocument(urlFile.toString());
 			}
 		}
-		if (repository.save(c) == null) {
+		try {
+			if (c != null) {
+			    repository.save(c);
+			} else {
+				throw new CreateRegisterException("Error al guardar registro de Documento de empleado, EmployeeDocument nulo");
+			}
+		} catch (Exception ex) {
 			throw new CreateRegisterException("Error al guardar registro de Documento de empleado");
 		}
 		Map<String, Object> response = new HashMap<>();

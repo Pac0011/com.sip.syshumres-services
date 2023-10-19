@@ -32,7 +32,7 @@ public class EmployeeAreaServiceImpl extends CommonServiceImpl<EmployeeArea, Emp
 	@Override
 	public Page<EmployeeArea> findByFilterSession(String filter, Pageable pageable) {
 		
-		if (filter != null && filter != "") {
+		if (filter != null && !filter.equals("")) {
 			return repository.findByDescriptionLikeOrCostCenterLikeOrFatherLike(filter, pageable);
 		}
 		

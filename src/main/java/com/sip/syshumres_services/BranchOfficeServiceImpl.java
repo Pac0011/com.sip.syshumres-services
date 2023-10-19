@@ -77,7 +77,7 @@ public class BranchOfficeServiceImpl implements BranchOfficeService {
 	@Override
 	public Page<BranchOffice> findByFilterSession(String filter, Pageable pageable) {
 		
-		if (filter != null && filter != "") {
+		if (filter != null && !filter.equals("")) {
 			return repository.findByDescriptionLikeOrBranchOfficeTypeLikeOrCostCenterLikeOr(filter, pageable);
 		}
 		

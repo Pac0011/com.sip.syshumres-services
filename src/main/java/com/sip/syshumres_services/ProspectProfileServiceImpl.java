@@ -73,7 +73,7 @@ implements ProspectProfileService {
 		
 		//Create Payroll
 		EmployeePayroll ep = new EmployeePayroll();
-		if (entity.getRfc() != null && entity.getRfc() != "") {
+		if (entity.getRfc() != null && !entity.getRfc().equals("")) {
 			ep.setRfc(entity.getRfc());
 		}
 		e.setEmployeePayroll(ep);
@@ -91,9 +91,11 @@ implements ProspectProfileService {
 		e.setEmployeeOperation(eo);
 		
 		entity.setProspectStatus(status);
-		if (repository.save(entity) == null) {
-			return null;
-		}
+		try {
+			repository.save(entity);
+	    } catch (Exception ex) {
+	    	return null;
+	    }
 		
 		return repositoryE.save(e);
 	}
@@ -122,7 +124,7 @@ implements ProspectProfileService {
 	public Page<ProspectProfile> findByFilterSession(String filter, User user, Pageable pageable) {
 		Page<ProspectProfile> entities = null;
 		
-		if (filter != null && filter != "") {
+		if (filter != null && !filter.equals("")) {
 			if (user.isSeeAllBranchs()) {
 				entities = repository.findByFullNameLikeOrRfcLikeOrCurpLikeOr(filter, pageable);
 			} else {
@@ -144,30 +146,32 @@ implements ProspectProfileService {
 	@Transactional(readOnly = true)
 	public void validEntity(ProspectProfile entity, Long id) 
 			throws ProspectFieldsAlreadyExistException, EmployeeFieldsAlreadyExistException {
+		String info = " ) esta asociado a otro Prospecto, valide la información";
+		String info2 = " ) esta asociado a otro perfil contratado, valide la información del Prospecto";
 		//valid email repeat
 		if (repository.countByEmailWithAnotherProspect(entity.getEmail(), id) > 0) {
-			throw new ProspectFieldsAlreadyExistException("El Email ( " + entity.getEmail() + " ) esta asociado a otro Prospecto, valide la información");
+			throw new ProspectFieldsAlreadyExistException("El Email ( " + entity.getEmail() + info);
 		}
 		//valid Curp repeat
 		if (repository.countByCurpWithAnotherProspect(entity.getCurp(), id) > 0) {
-			throw new ProspectFieldsAlreadyExistException("La Curp ( " + entity.getCurp() + " ) esta asociado a otro Prospecto, valide la información");
+			throw new ProspectFieldsAlreadyExistException("La Curp ( " + entity.getCurp() + info);
 		}
 		//valid Rfc repeat
 		if (repository.countByRfcWithAnotherProspect(entity.getRfc(), id) > 0) {
-			throw new ProspectFieldsAlreadyExistException("El Rfc ( " + entity.getRfc() + " ) esta asociado a otro Prospecto, valide la información");
+			throw new ProspectFieldsAlreadyExistException("El Rfc ( " + entity.getRfc() + info);
 		}
 						
 		//valid email repeat
 		if (repositoryE.countByEmailWithAnotherEmployee(entity.getEmail(), 0L) > 0) {
-			throw new EmployeeFieldsAlreadyExistException("El Email ( " + entity.getEmail() + " ) esta asociado a otro perfil contratado, valide la información del Prospecto");
+			throw new EmployeeFieldsAlreadyExistException("El Email ( " + entity.getEmail() + info2);
 		}
 		//valid Curp repeat
 		if (repositoryE.countByCurpWithAnotherEmployee(entity.getCurp(), 0L) > 0) {
-			throw new EmployeeFieldsAlreadyExistException("La Curp ( " + entity.getCurp() + " ) esta asociado a otro perfil contratado, valide la información del Prospecto");
+			throw new EmployeeFieldsAlreadyExistException("La Curp ( " + entity.getCurp() + info2);
 		}
 		//valid Rfc repeat
 		if (repositoryE.countByRfcWithAnotherEmployee(entity.getRfc(), 0L) > 0) {
-			throw new EmployeeFieldsAlreadyExistException("El Rfc ( " + entity.getRfc() + " ) esta asociado a otro perfil contratado, valide la información del Prospecto");
+			throw new EmployeeFieldsAlreadyExistException("El Rfc ( " + entity.getRfc() + info2);
 		}
 		
 	}

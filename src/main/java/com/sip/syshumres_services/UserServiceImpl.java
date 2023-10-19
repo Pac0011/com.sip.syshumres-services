@@ -109,9 +109,7 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 	@Override
 	@Transactional
     public User assignAuthorities(User entity, List<Authority> authorities) {
-		authorities.forEach(m -> 
-			entity.addAuthority(m)
-		);
+		authorities.forEach(entity::addAuthority);
 		
 		return repository.save(entity);
 	}

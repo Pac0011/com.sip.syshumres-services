@@ -41,7 +41,7 @@ public class AuthorityServiceImpl extends CommonServiceImpl<Authority, Authority
 	@Override
 	public Page<Authority> findByFilterSession(String filter, Pageable pageable) {
 		
-		if (filter != null && filter != "") {
+		if (filter != null && !filter.equals("")) {
 			return repository.findByDescriptionLikeOrDetailLike(filter, pageable);
 		} 
 		
@@ -51,12 +51,12 @@ public class AuthorityServiceImpl extends CommonServiceImpl<Authority, Authority
 	@Transactional(readOnly = true)
 	@Override
 	public List<ModuleListDTO> getModulesChilds(Authority entity) {
-		List<ModuleListDTO> modulesDTO = new ArrayList<ModuleListDTO>();
+		List<ModuleListDTO> modulesDTO = new ArrayList<>();
 		
 		if (entity.getModules() != null) {
 			entity.getModules().forEach(module -> {
-				List<ModuleListDTO> modulesChildsDTO = new ArrayList<ModuleListDTO>();
-				if (module.getChilds() != null && module.getChilds().size() > 0) {
+				List<ModuleListDTO> modulesChildsDTO = new ArrayList<>();
+				if (module.getChilds() != null && !module.getChilds().isEmpty()) {
 					module.getChilds().forEach(c -> {
 						//Filter only child modules assign to module father
 						if (repository.countByAuthorityIdAndModuleId(entity.getId(), c.getId()) > 0) {
@@ -79,9 +79,7 @@ public class AuthorityServiceImpl extends CommonServiceImpl<Authority, Authority
 	@Transactional
 	public Authority assignModules(Authority entity, List<Module> modules) {
 		
-		modules.forEach(m -> {
-			entity.addModule(m);
-		});
+		modules.forEach(entity::addModule);
 		
 		return repository.save(entity);
 	}

@@ -32,7 +32,7 @@ public class HiringDocumentsServiceImpl extends CommonServiceImpl<HiringDocument
 	@Override
 	public Page<HiringDocuments> findByFilterSession(String filter, Pageable pageable) {
 		
-		if (filter != null && filter != "") {
+		if (filter != null && !filter.equals("")) {
 			return repository.findByDescriptionLikeOrHiringDocumentsTypeLike(filter, pageable);
 		} 
 		

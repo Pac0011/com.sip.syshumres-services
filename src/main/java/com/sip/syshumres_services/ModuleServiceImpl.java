@@ -30,7 +30,7 @@ public class ModuleServiceImpl extends CommonServiceImpl<Module, ModuleRepositor
 	@Transactional(readOnly = true)
 	public Page<Module> findByFilterSession(String filter, Pageable pageable) {
 		
-		if (filter != null && filter != "") {
+		if (filter != null && !filter.equals("")) {
 			return repository.findByDescriptionLikeOrUrlLikeOrDetail(filter, pageable);
 		} 
 		

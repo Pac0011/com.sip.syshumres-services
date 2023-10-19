@@ -26,7 +26,7 @@ public class ManagingCompanyServiceImpl extends CommonServiceImpl<ManagingCompan
 	@Override
 	public Page<ManagingCompany> findByFilterSession(String filter, Pageable pageable) {
 		
-		if (filter != null && filter != "") {
+		if (filter != null && !filter.equals("")) {
 			return repository.findByDescriptionLikeOrCompanyNameLikeOrRfcLikeOr(filter, pageable);
 		} 
 		
@@ -37,9 +37,7 @@ public class ManagingCompanyServiceImpl extends CommonServiceImpl<ManagingCompan
 	@Transactional
 	public ManagingCompany assignBranchOffices(ManagingCompany entity, List<BranchOffice> branchOffices) {
 		
-		branchOffices.forEach(m -> {
-			entity.addBranchOffice(m);
-		});
+		branchOffices.forEach(entity::addBranchOffice);
 		
 		return repository.save(entity);
 	}
