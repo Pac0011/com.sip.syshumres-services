@@ -1,5 +1,6 @@
 package com.sip.syshumres_services;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,8 @@ import com.sip.syshumres_utils.StringTrim;
 
 @Service
 public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> implements UserService {
+	
+	private static final String MSG_ERROR_EMPTY = "La contraseña no debe estar vacia";
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -71,7 +74,7 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 	@Override
 	public Page<User> findByFilterSession(String filter, Pageable pageable) {
 		
-		if (filter != null && filter != "") {
+		if (filter != null && !filter.equals("")) {
 			return repository.findByUsernameLikeOrFirstNameLikeOrEmailLike(filter, pageable);
 		} 
 		
@@ -88,9 +91,6 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 	
 	@Override
 	public boolean validUserPassword(String passOld, String passSession) {
-		//System.out.println("passOld: " + passOld);
-		//System.out.println("userSession.getPassword(): " + userSession.getPassword());
-		//System.out.println("Res: " + bc.matches(passOld, userSession.getPassword()));
 		return new BCryptPasswordEncoder().matches(passOld, passSession);
 	}
 	
@@ -109,9 +109,9 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 	@Override
 	@Transactional
     public User assignAuthorities(User entity, List<Authority> authorities) {
-		authorities.forEach(m -> {
-			entity.addAuthority(m);
-		});
+		authorities.forEach(m -> 
+			entity.addAuthority(m)
+		);
 		
 		return repository.save(entity);
 	}
@@ -142,14 +142,14 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
             return errors;
         }
         
-        return null;
+        return Collections.emptyMap();
     }
 	
 	@Override
 	public Map<String, Object> validChangePassword(String passCurrent, String passOld, String passNew, String passConfirm) {
 		if (passOld.equals("")) {
 			Map<String, Object> errors = new HashMap<>();
-			errors.put("password_old", "La contraseña no debe estar vacia");
+			errors.put("password_old", MSG_ERROR_EMPTY);
 			return errors;
 		}
 		
@@ -162,7 +162,7 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 		String passN = StringTrim.trimAndRemoveDiacriticalMarks(passNew);
 		if (passN.equals("")) {
 			Map<String, Object> errors = new HashMap<>();
-			errors.put("password", "La contraseña no debe estar vacia");
+			errors.put("password_new", MSG_ERROR_EMPTY);
 			return errors;
 		}
 		
@@ -173,14 +173,14 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 			return errors;
 		}
 		 
-		return null;
+		return Collections.emptyMap();
 	}
 	
 	@Override
 	public Map<String, Object> validNewPassword(String passNew, String passConfirm) {
 		if (passNew.equals("")) {
 			Map<String, Object> errors = new HashMap<>();
-			errors.put("password", "La contraseña no debe estar vacia");
+			errors.put("password_new", MSG_ERROR_EMPTY);
 			return errors;
 		}
 		
@@ -190,7 +190,7 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 			return errors;
 		}
 		 
-		return null;
+		return Collections.emptyMap();
 	}
 	
 	@Override
