@@ -1,6 +1,7 @@
 package com.sip.syshumres_services;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import com.sip.syshumres_entities.HiringDocuments;
 import com.sip.syshumres_exceptions.CreateRegisterException;
 import com.sip.syshumres_exceptions.EntityIdNotFoundException;
 import com.sip.syshumres_exceptions.TypeHiringDocumentNotExistException;
+import com.sip.syshumres_exceptions.UploadFileException;
 import com.sip.syshumres_exceptions.UploadFormatsAllowException;
 import com.sip.syshumres_repositories.EmployeeDocumentRepository;
 import com.sip.syshumres_repositories.EmployeeProfileRepository;
@@ -64,7 +66,9 @@ public class EmployeeDocumentServiceImpl extends CommonServiceImpl<EmployeeDocum
 	@Override
 	@Transactional
 	public Map<String, Object> uploadFile(Long idEmployeeProfile, Long idHiringDocument, MultipartFile fileUpload) 
-			throws UploadFormatsAllowException, EntityIdNotFoundException, TypeHiringDocumentNotExistException, CreateRegisterException {
+			throws UploadFormatsAllowException, EntityIdNotFoundException
+			, TypeHiringDocumentNotExistException, CreateRegisterException
+			, IOException, UploadFileException {
 		EmployeeDocument c = null;
 		StringBuilder urlFile = new StringBuilder(this.urlDocuments);
 		if (!fileUpload.isEmpty()) {
@@ -78,6 +82,9 @@ public class EmployeeDocumentServiceImpl extends CommonServiceImpl<EmployeeDocum
 			}
 			EmployeeProfile e = o.get();
 			String newNameFile = UtilFile.saveFile(fileUpload, this.uploadDocuments + e.getEcript() + File.separator);
+			if (newNameFile == null) {
+				throw new UploadFileException();
+			}
 			urlFile.append(e.getEcript()).append(File.separator).append(newNameFile);
 			Optional<EmployeeDocument> o2 = repository.findByEmployeeProfileAndHiringDocument(idEmployeeProfile, idHiringDocument);
 			if (!o2.isPresent()) {

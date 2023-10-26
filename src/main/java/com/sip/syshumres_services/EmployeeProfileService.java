@@ -1,5 +1,6 @@
 package com.sip.syshumres_services;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
@@ -54,9 +55,9 @@ public interface EmployeeProfileService extends CommonService<EmployeeProfile> {
 	
 	public Map<String, Object> uploadFile(Long id, String nameInput, MultipartFile fileUpload) 
 			throws EntityIdNotFoundException, UploadFormatsAllowException, UploadFileException, 
-			UnknownOptionException, CreateRegisterException;
+			UnknownOptionException, CreateRegisterException, IOException;
 	
-	public Resource getFileEmployee(EmployeeProfile entity, String nameInput);
+	public Resource getFileEmployee(EmployeeProfile entity, String nameInput) throws IOException;
 	
 	public Map<String, Object> validEntity(EmployeeProfile entity, Long id);
 		

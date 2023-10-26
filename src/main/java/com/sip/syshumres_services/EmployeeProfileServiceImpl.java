@@ -2,6 +2,7 @@ package com.sip.syshumres_services;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -178,8 +179,8 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 	@Override
 	@Transactional
 	public Map<String, Object> uploadFile(Long id, String nameInput, MultipartFile fileUpload) 
-			throws EntityIdNotFoundException, UploadFormatsAllowException, UploadFileException, 
-			UnknownOptionException, CreateRegisterException {		
+			throws EntityIdNotFoundException, UploadFormatsAllowException, UploadFileException
+			, UnknownOptionException, CreateRegisterException, IOException {		
 		Optional<EmployeeProfile> o = Optional.empty();
 		if (nameInput.equals(NM_COVIDCERT)) {
 			o = repository.findByIdEmployeeClinicalData(id);
@@ -251,7 +252,7 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 	}
 	
 	@Override
-	public Resource getFileEmployee(EmployeeProfile entity, String nameInput) {
+	public Resource getFileEmployee(EmployeeProfile entity, String nameInput) throws IOException {
 		Resource resource = null;
 		
 		switch (nameInput) {
