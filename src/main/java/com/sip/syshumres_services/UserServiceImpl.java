@@ -95,15 +95,13 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 	}
 	
 	@Override
-	public HttpSession logout(HttpSession session, String sessionUserName) {
+	public void logout(HttpSession session, String sessionUserName) {
 		SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.setInvalidateHttpSession(true);        
         SecurityContextHolder.clearContext();
         
         session.setAttribute(sessionUserName, "");
-        session.invalidate();
-        
-        return session;
+        session.invalidate();        
 	}
 	
 	@Override
