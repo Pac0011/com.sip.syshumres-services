@@ -53,12 +53,12 @@ public interface EmployeeProfileService extends CommonService<EmployeeProfile> {
 	
 	public Page<EmployeeProfile> findByFilterSession(String filter, User user, Long idEmployeeType, Pageable pageable);
 	
-	public Map<String, Object> uploadFile(Long id, String nameInput, MultipartFile fileUpload) 
+	public String uploadFile(Long id, String nameInput, MultipartFile fileUpload) 
 			throws EntityIdNotFoundException, UploadFormatsAllowException, UploadFileException, 
 			UnknownOptionException, CreateRegisterException, IOException;
 	
 	public Resource getFileEmployee(EmployeeProfile entity, String nameInput) throws IOException;
 	
-	public Map<String, Object> validEntity(EmployeeProfile entity, Long id);
+	public Map<String, String> validEntity(EmployeeProfile entity, Long id);
 		
 }

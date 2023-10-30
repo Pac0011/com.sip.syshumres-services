@@ -1,7 +1,6 @@
 package com.sip.syshumres_services;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +18,7 @@ public interface EmployeeDocumentService extends CommonService<EmployeeDocument>
 	
 	public Optional<EmployeeDocument> findByEmployeeProfileAndHiringDocument(Long idEmployeeProfile, Long idHiringDocuments);
 	
-	public Map<String, Object> uploadFile(Long idEmployeeProfile, Long idHiringDocument, MultipartFile fileUpload) 
+	public String uploadFile(Long idEmployeeProfile, Long idHiringDocument, MultipartFile fileUpload) 
 			throws UploadFormatsAllowException, EntityIdNotFoundException, TypeHiringDocumentNotExistException, 
 			CreateRegisterException, IOException, UploadFileException;
 

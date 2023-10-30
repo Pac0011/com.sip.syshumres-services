@@ -178,7 +178,7 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 	
 	@Override
 	@Transactional
-	public Map<String, Object> uploadFile(Long id, String nameInput, MultipartFile fileUpload) 
+	public String uploadFile(Long id, String nameInput, MultipartFile fileUpload) 
 			throws EntityIdNotFoundException, UploadFormatsAllowException, UploadFileException
 			, UnknownOptionException, CreateRegisterException, IOException {		
 		Optional<EmployeeProfile> o = Optional.empty();
@@ -234,10 +234,8 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 		} catch (Exception ex) {
 			throw new CreateRegisterException();
 		}
-		Map<String, Object> response = new HashMap<>();
-		response.put("message", urlFile.toString());
 		
-		return response;
+		return urlFile.toString();
 	}
 	
 	private void validFileFormat(MultipartFile fileUpload) throws UploadFileException, 
@@ -301,16 +299,16 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 	
 	@Override
 	@Transactional(readOnly = true)
-	public Map<String, Object> validEntity(EmployeeProfile entity, Long id) {
+	public Map<String, String> validEntity(EmployeeProfile entity, Long id) {
 		//valid email repeat
 		if (repository.countByEmailWithAnotherEmployee(entity.getEmail(), id) > 0) {
-			Map<String, Object> errors = new HashMap<>();
+			Map<String, String> errors = new HashMap<>();
 			errors.put("email", "El campo Email esta asociado a otro perfil ingrese uno nuevo");
 			return errors;
 		}
 		//valid Curp repeat
 		if (repository.countByCurpWithAnotherEmployee(entity.getCurp(), id) > 0) {
-			Map<String, Object> errors = new HashMap<>();
+			Map<String, String> errors = new HashMap<>();
 			errors.put("curp", "El campo Curp esta asociado a otro perfil ingrese uno nuevo");
 			return errors;
 		}
@@ -320,7 +318,7 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 			if (entity.getEmployeePayroll().getNss() != null) {
 				entity.getEmployeePayroll().setNss(StringTrim.trimAndRemoveDiacriticalMarks(entity.getEmployeePayroll().getNss()));
 				if (repository.countByNssWithAnotherEmployee(entity.getEmployeePayroll().getNss(), id) > 0) {
-					Map<String, Object> errors = new HashMap<>();
+					Map<String, String> errors = new HashMap<>();
 					errors.put("employeePayroll_nss", "El campo Nss esta asociado a otro perfil ingrese uno nuevo");
 					return errors;
 				}
@@ -329,7 +327,7 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 			if (entity.getEmployeePayroll().getRfc() != null) {
 				entity.getEmployeePayroll().setRfc(StringTrim.trimAndRemoveDiacriticalMarks(entity.getEmployeePayroll().getRfc()));
 				if (repository.countByRfcWithAnotherEmployee(entity.getEmployeePayroll().getRfc(), id) > 0) {
-					Map<String, Object> errors = new HashMap<>();
+					Map<String, String> errors = new HashMap<>();
 					errors.put("employeePayroll_rfc", "El campo Rfc esta asociado a otro perfil ingrese uno nuevo");
 					return errors;
 				}
@@ -338,7 +336,7 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 			if (entity.getEmployeePayroll().getBankAccount() != null) {
 				entity.getEmployeePayroll().setBankAccount(StringTrim.trimAndRemoveDiacriticalMarks(entity.getEmployeePayroll().getBankAccount()));
 				if (repository.countByBankAccountWithAnotherEmployee(entity.getEmployeePayroll().getBankAccount(), id) > 0) {
-					Map<String, Object> errors = new HashMap<>();
+					Map<String, String> errors = new HashMap<>();
 					errors.put("employeePayroll_bankAccount", "El campo Cuenta esta asociado a otro perfil ingrese uno nuevo");
 					return errors;
 				}
@@ -349,7 +347,7 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 				entity.getEmployeePayroll().setClabe(StringTrim.trimAndRemoveDiacriticalMarks(entity.getEmployeePayroll().getClabe()));
 			    if (!entity.getEmployeePayroll().getClabe().equals("") 
 			    	&& repository.countByClabeWithAnotherEmployee(entity.getEmployeePayroll().getClabe(), id) > 0) {
-					Map<String, Object> errors = new HashMap<>();
+					Map<String, String> errors = new HashMap<>();
 					errors.put("employeePayroll_clabe", "El campo Clabe esta asociado a otro perfil ingrese uno nuevo");
 					return errors;
 			    }

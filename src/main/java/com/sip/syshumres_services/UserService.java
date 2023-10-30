@@ -42,11 +42,11 @@ public interface UserService extends CommonService<User> {
     
     User removeAuthority(User entity, Authority authority);
     
-    Map<String, Object> validEntity(User entity, Long id);
+    Map<String, String> validEntity(User entity, Long id);
     
-    Map<String, Object> validChangePassword(String passCurrent, String passOld, String passNew, String passConfirm);
+    Map<String, String> validChangePassword(String passCurrent, String passOld, String passNew, String passConfirm);
     
-    Map<String, Object> validNewPassword(String passNew, String passConfirm);
+    Map<String, String> validNewPassword(String passNew, String passConfirm);
     
     String encodePassword(String pass);
 

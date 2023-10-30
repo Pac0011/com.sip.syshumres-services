@@ -2,8 +2,6 @@ package com.sip.syshumres_services;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +63,7 @@ public class EmployeeDocumentServiceImpl extends CommonServiceImpl<EmployeeDocum
 	
 	@Override
 	@Transactional
-	public Map<String, Object> uploadFile(Long idEmployeeProfile, Long idHiringDocument, MultipartFile fileUpload) 
+	public String uploadFile(Long idEmployeeProfile, Long idHiringDocument, MultipartFile fileUpload) 
 			throws UploadFormatsAllowException, EntityIdNotFoundException
 			, TypeHiringDocumentNotExistException, CreateRegisterException
 			, IOException, UploadFileException {
@@ -110,10 +108,8 @@ public class EmployeeDocumentServiceImpl extends CommonServiceImpl<EmployeeDocum
 		} catch (Exception ex) {
 			throw new CreateRegisterException("Error al guardar registro de Documento de empleado");
 		}
-		Map<String, Object> response = new HashMap<>();
-		response.put("message", urlFile.toString());
 		
-		return response;
+		return urlFile.toString();
 	}
 	
 }

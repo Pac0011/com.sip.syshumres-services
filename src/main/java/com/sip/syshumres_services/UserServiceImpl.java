@@ -123,17 +123,17 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 	
 	@Override
 	@Transactional(readOnly = true)
-	public Map<String, Object> validEntity(User entity, Long id) {
+	public Map<String, String> validEntity(User entity, Long id) {
         //valid email
         if (repository.countByEmailWithAnotherUser(entity.getEmail(), id) > 0) {
-            Map<String, Object> errors = new HashMap<>();
+            Map<String, String> errors = new HashMap<>();
             errors.put("email", "El Email esta asociado a otro usuario ingrese uno nuevo");
             return errors;
         }
         
         //valid username
         if (repository.countByUsernameWithAnotherUser(entity.getUsername(), id) > 0) {
-            Map<String, Object> errors = new HashMap<>();
+            Map<String, String> errors = new HashMap<>();
             errors.put("username", "El nombre de Usuario esta asociado a otro registro ingrese uno nuevo");
             return errors;
         }
@@ -142,29 +142,29 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
     }
 	
 	@Override
-	public Map<String, Object> validChangePassword(String passCurrent, String passOld, String passNew, String passConfirm) {
+	public Map<String, String> validChangePassword(String passCurrent, String passOld, String passNew, String passConfirm) {
 		if (passOld.equals("")) {
-			Map<String, Object> errors = new HashMap<>();
+			Map<String, String> errors = new HashMap<>();
 			errors.put("password_old", MSG_ERROR_EMPTY);
 			return errors;
 		}
 		
 	    if (!this.validUserPassword(passOld, passCurrent)) {
-			Map<String, Object> errors = new HashMap<>();
+			Map<String, String> errors = new HashMap<>();
 			errors.put("password_old", "La contraseña actual, no coincide con la que está guardada");
 			return errors;
 		}
 		
 		String passN = StringTrim.trimAndRemoveDiacriticalMarks(passNew);
 		if (passN.equals("")) {
-			Map<String, Object> errors = new HashMap<>();
+			Map<String, String> errors = new HashMap<>();
 			errors.put("password_new", MSG_ERROR_EMPTY);
 			return errors;
 		}
 		
 		String passC = StringTrim.trimAndRemoveDiacriticalMarks(passConfirm);
 		if (!passN.equals(passC)) {
-			Map<String, Object> errors = new HashMap<>();
+			Map<String, String> errors = new HashMap<>();
 			errors.put("password_confirm", "La confirmación de la contraseña no es la misma");
 			return errors;
 		}
@@ -173,15 +173,15 @@ public class UserServiceImpl extends CommonServiceImpl<User, UserRepository> imp
 	}
 	
 	@Override
-	public Map<String, Object> validNewPassword(String passNew, String passConfirm) {
+	public Map<String, String> validNewPassword(String passNew, String passConfirm) {
 		if (passNew.equals("")) {
-			Map<String, Object> errors = new HashMap<>();
+			Map<String, String> errors = new HashMap<>();
 			errors.put("password_new", MSG_ERROR_EMPTY);
 			return errors;
 		}
 		
 		if (!passNew.equals(passConfirm)) {
-			Map<String, Object> errors = new HashMap<>();
+			Map<String, String> errors = new HashMap<>();
 			errors.put("password_confirm", "La confirmación de la contraseña no es la misma");
 			return errors;
 		}
