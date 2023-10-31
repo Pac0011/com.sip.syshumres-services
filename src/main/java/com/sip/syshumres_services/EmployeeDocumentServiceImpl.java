@@ -67,41 +67,25 @@ public class EmployeeDocumentServiceImpl extends CommonServiceImpl<EmployeeDocum
 			throws UploadFormatsAllowException, EntityIdNotFoundException
 			, TypeHiringDocumentNotExistException, CreateRegisterException
 			, IOException, UploadFileException {
-		EmployeeDocument c = null;
+		EmployeeDocument doc = null;
 		StringBuilder urlFile = new StringBuilder(this.urlDocuments);
 		if (!fileUpload.isEmpty()) {
 			String contentType = fileUpload.getContentType();
 			if (contentType == null || this.uploadFormatsAllow.indexOf(contentType) < 0) {
 				throw new UploadFormatsAllowException("y es (" + contentType + ")");
 			}
-			Optional<EmployeeProfile> o = this.repositoryE.findById(idEmployeeProfile);
-			if (!o.isPresent()) {
-				throw new EntityIdNotFoundException("Error al guardar documento, no existe id empleado " + idEmployeeProfile);
-			}
-			EmployeeProfile e = o.get();
-			String newNameFile = UtilFile.saveFile(fileUpload, this.uploadDocuments + e.getEcript() + File.separator);
+			EmployeeProfile employee = this.getEmployeeProfile(idEmployeeProfile);
+			String newNameFile = UtilFile.saveFile(fileUpload, this.uploadDocuments 
+					+ employee.getEcript() + File.separator);
 			if (newNameFile == null) {
 				throw new UploadFileException();
 			}
-			urlFile.append(e.getEcript()).append(File.separator).append(newNameFile);
-			Optional<EmployeeDocument> o2 = repository.findByEmployeeProfileAndHiringDocument(idEmployeeProfile, idHiringDocument);
-			if (!o2.isPresent()) {
-				Optional<HiringDocuments> o3 = this.repositoryH.findById(idHiringDocument);
-				if (!o3.isPresent()) {
-					throw new TypeHiringDocumentNotExistException("Error al guardar documento, no existe el tipo de documento de contratacion " + idHiringDocument);
-				}
-				c = new EmployeeDocument();
-				c.setDocument(urlFile.toString());
-				c.setEmployeeProfile(e);
-				c.setHiringDocuments(o3.get());
-			} else {
-				c = o2.get();
-				c.setDocument(urlFile.toString());
-			}
+			urlFile.append(employee.getEcript()).append(File.separator).append(newNameFile);
+			doc = this.getDocument(employee, idEmployeeProfile, idHiringDocument, urlFile.toString());
 		}
 		try {
-			if (c != null) {
-			    repository.save(c);
+			if (doc != null) {
+			    repository.save(doc);
 			} else {
 				throw new CreateRegisterException("Error al guardar registro de Documento de empleado, EmployeeDocument nulo");
 			}
@@ -110,6 +94,36 @@ public class EmployeeDocumentServiceImpl extends CommonServiceImpl<EmployeeDocum
 		}
 		
 		return urlFile.toString();
+	}
+	
+	private EmployeeProfile getEmployeeProfile(Long idEmployeeProfile) throws EntityIdNotFoundException {
+		
+		Optional<EmployeeProfile> o = this.repositoryE.findById(idEmployeeProfile);
+		if (!o.isPresent()) {
+			throw new EntityIdNotFoundException("Error al guardar documento, no existe id empleado " + idEmployeeProfile);
+		}
+		return o.get();
+	}
+	
+	private EmployeeDocument getDocument(EmployeeProfile employee, Long idEmployeeProfile, Long idHiringDocument, String urlFile) 
+			throws TypeHiringDocumentNotExistException {
+		EmployeeDocument doc = null;
+		Optional<EmployeeDocument> o2 = repository.findByEmployeeProfileAndHiringDocument(idEmployeeProfile, idHiringDocument);
+		if (!o2.isPresent()) {
+			Optional<HiringDocuments> o3 = this.repositoryH.findById(idHiringDocument);
+			if (!o3.isPresent()) {
+				throw new TypeHiringDocumentNotExistException("Error al guardar documento, no existe el tipo de documento de contratacion " + idHiringDocument);
+			}
+			doc = new EmployeeDocument();
+			doc.setDocument(urlFile);
+			doc.setEmployeeProfile(employee);
+			doc.setHiringDocuments(o3.get());
+		} else {
+			doc = o2.get();
+			doc.setDocument(urlFile);
+		}
+	
+		return doc;
 	}
 	
 }

@@ -181,28 +181,12 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 	public String uploadFile(Long id, String nameInput, MultipartFile fileUpload) 
 			throws EntityIdNotFoundException, UploadFormatsAllowException, UploadFileException
 			, UnknownOptionException, CreateRegisterException, IOException {		
-		Optional<EmployeeProfile> o = Optional.empty();
-		if (nameInput.equals(NM_COVIDCERT)) {
-			o = repository.findByIdEmployeeClinicalData(id);
-		} else if (nameInput.equals(NM_BANKACCOUNT)) { 
-			o = repository.findByIdEmployeePayroll(id);
-		} else {
-			o = repository.findById(id);
-		}
-		if (!o.isPresent()) {
-			throw new EntityIdNotFoundException("No se pudo subir archivo, Id Empleado " 
-					+ id + " no encontrado");
-		}
-		EmployeeProfile entity = o.get();
+		EmployeeProfile entity = this.getEmployeeProfile(id, nameInput);
 		StringBuilder urlFile = new StringBuilder(this.urlDocuments);
 		//Valid file
 		this.validFileFormat(fileUpload);
-			
 		String newNameFile = null;
-		if (nameInput.equals(NM_FILECURP) || nameInput.equals(NM_FRONTPHOTO)
-				|| nameInput.equals(NM_LEFTPHOTO) || nameInput.equals(NM_RIGHTPHOTO)
-				|| nameInput.equals(NM_COVIDCERT) || nameInput.equals(NM_BANKACCOUNT)) {
-			
+		if (validOption(nameInput)) {
 			newNameFile = UtilFile.saveFile(fileUpload, this.uploadDocuments + entity.getEcript() + File.separator);
 			if (newNameFile != null) {
 				urlFile.append(entity.getEcript())
@@ -224,11 +208,9 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 			} else {
 				throw new UploadFileException();
 			}
-			
-		} else {
+		} else { 
 			throw new UnknownOptionException();
 		}
-
 		try { 
 			repository.save(entity);
 		} catch (Exception ex) {
@@ -236,6 +218,29 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 		}
 		
 		return urlFile.toString();
+	}
+	
+	private EmployeeProfile getEmployeeProfile(Long id, String nameInput) throws EntityIdNotFoundException {
+		Optional<EmployeeProfile> o = Optional.empty();
+		if (nameInput.equals(NM_COVIDCERT)) {
+			o = repository.findByIdEmployeeClinicalData(id);
+		} else if (nameInput.equals(NM_BANKACCOUNT)) { 
+			o = repository.findByIdEmployeePayroll(id);
+		} else {
+			o = repository.findById(id);
+		}
+		if (!o.isPresent()) {
+			throw new EntityIdNotFoundException("No se pudo subir archivo, Id Empleado " 
+					+ id + " no encontrado");
+		}
+		
+		return o.get();
+	}
+	
+	private boolean validOption(String nameInput) {
+		return (nameInput.equals(NM_FILECURP) || nameInput.equals(NM_FRONTPHOTO)
+				|| nameInput.equals(NM_LEFTPHOTO) || nameInput.equals(NM_RIGHTPHOTO)
+				|| nameInput.equals(NM_COVIDCERT) || nameInput.equals(NM_BANKACCOUNT));
 	}
 	
 	private void validFileFormat(MultipartFile fileUpload) throws UploadFileException, 
@@ -255,37 +260,35 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 		
 		switch (nameInput) {
 			case NM_FILECURP:
-				if (entity.getFileCurp() != null && !entity.getFileCurp().equals("")) {
+				if (validStringEmpty(entity.getFileCurp())) {
 					resource = UtilFile.getFileStream(this.uploadBaseDocuments + entity.getFileCurp());
 				}
 				break;
 			case NM_LEFTPHOTO:
-				if (entity.getLeftPhoto() != null && !entity.getLeftPhoto().equals("")) {
+				if (validStringEmpty(entity.getLeftPhoto())) {
 					resource = UtilFile.getFileStream(this.uploadBaseDocuments + entity.getLeftPhoto());
 				}
 				break;
 			case NM_FRONTPHOTO:
-				if (entity.getFrontPhoto() != null && !entity.getFrontPhoto().equals("")) {
+				if (validStringEmpty(entity.getFrontPhoto())) {
 					resource = UtilFile.getFileStream(this.uploadBaseDocuments + entity.getFrontPhoto());
 				}
 				break;
 			case NM_RIGHTPHOTO:
-				if (entity.getRightPhoto() != null && !entity.getRightPhoto().equals("")) {
+				if (validStringEmpty(entity.getRightPhoto())) {
 					resource = UtilFile.getFileStream(this.uploadBaseDocuments + entity.getRightPhoto());
 				}
 				break;
 			case NM_COVIDCERT:
 				if (entity.getEmployeeClinicalData() != null 
-					&& entity.getEmployeeClinicalData().getCovidCertificate() != null 
-					&& !entity.getEmployeeClinicalData().getCovidCertificate().equals("")) {
+					&& validStringEmpty(entity.getEmployeeClinicalData().getCovidCertificate())) {
 					resource = UtilFile.getFileStream(this.uploadBaseDocuments 
 						+ entity.getEmployeeClinicalData().getCovidCertificate());
 				}
 				break;
 			case NM_BANKACCOUNT:
 				if (entity.getEmployeePayroll() != null 
-					&& entity.getEmployeePayroll().getBankAccountFile() != null 
-					&& !entity.getEmployeePayroll().getBankAccountFile().equals("")) {
+					&& validStringEmpty(entity.getEmployeePayroll().getBankAccountFile())) {
 					resource = UtilFile.getFileStream(this.uploadBaseDocuments 
 						+ entity.getEmployeePayroll().getBankAccountFile());
 				}
@@ -297,20 +300,20 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 		return resource;
 	}
 	
+	private boolean validStringEmpty(String val) {
+		return (val != null && !val.equals(""));
+	}
+	
 	@Override
 	@Transactional(readOnly = true)
 	public Map<String, String> validEntity(EmployeeProfile entity, Long id) {
 		//valid email repeat
 		if (repository.countByEmailWithAnotherEmployee(entity.getEmail(), id) > 0) {
-			Map<String, String> errors = new HashMap<>();
-			errors.put("email", "El campo Email esta asociado a otro perfil ingrese uno nuevo");
-			return errors;
+			return setMessage("email", "El campo Email esta asociado a otro perfil ingrese uno nuevo");
 		}
 		//valid Curp repeat
 		if (repository.countByCurpWithAnotherEmployee(entity.getCurp(), id) > 0) {
-			Map<String, String> errors = new HashMap<>();
-			errors.put("curp", "El campo Curp esta asociado a otro perfil ingrese uno nuevo");
-			return errors;
+			return setMessage("curp", "El campo Curp esta asociado a otro perfil ingrese uno nuevo");
 		}
 		
 		if (entity.getEmployeePayroll() != null) {
@@ -318,43 +321,42 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 			if (entity.getEmployeePayroll().getNss() != null) {
 				entity.getEmployeePayroll().setNss(StringTrim.trimAndRemoveDiacriticalMarks(entity.getEmployeePayroll().getNss()));
 				if (repository.countByNssWithAnotherEmployee(entity.getEmployeePayroll().getNss(), id) > 0) {
-					Map<String, String> errors = new HashMap<>();
-					errors.put("employeePayroll_nss", "El campo Nss esta asociado a otro perfil ingrese uno nuevo");
-					return errors;
+					return setMessage("employeePayroll_nss", "El campo Nss esta asociado a otro perfil ingrese uno nuevo");
 				}
 			}
 			//valid Rfc repeat
 			if (entity.getEmployeePayroll().getRfc() != null) {
 				entity.getEmployeePayroll().setRfc(StringTrim.trimAndRemoveDiacriticalMarks(entity.getEmployeePayroll().getRfc()));
-				if (repository.countByRfcWithAnotherEmployee(entity.getEmployeePayroll().getRfc(), id) > 0) {
-					Map<String, String> errors = new HashMap<>();
-					errors.put("employeePayroll_rfc", "El campo Rfc esta asociado a otro perfil ingrese uno nuevo");
-					return errors;
+				if (repository.countByRfcWithAnotherEmployee(entity.getEmployeePayroll().getRfc(), id) > 0) {					
+					return setMessage("employeePayroll_rfc", "El campo Rfc esta asociado a otro perfil ingrese uno nuevo");
 				}
 			}
 			//valid bankAccount repeat
 			if (entity.getEmployeePayroll().getBankAccount() != null) {
 				entity.getEmployeePayroll().setBankAccount(StringTrim.trimAndRemoveDiacriticalMarks(entity.getEmployeePayroll().getBankAccount()));
-				if (repository.countByBankAccountWithAnotherEmployee(entity.getEmployeePayroll().getBankAccount(), id) > 0) {
-					Map<String, String> errors = new HashMap<>();
-					errors.put("employeePayroll_bankAccount", "El campo Cuenta esta asociado a otro perfil ingrese uno nuevo");
-					return errors;
+				if (repository.countByBankAccountWithAnotherEmployee(entity.getEmployeePayroll().getBankAccount(), id) > 0) {					
+					return setMessage("employeePayroll_bankAccount", "El campo Cuenta esta asociado a otro perfil ingrese uno nuevo");
 				}
 			}
 			
 			//valid clabe repeat
 			if (entity.getEmployeePayroll().getClabe() != null) {
-				entity.getEmployeePayroll().setClabe(StringTrim.trimAndRemoveDiacriticalMarks(entity.getEmployeePayroll().getClabe()));
+				entity.getEmployeePayroll().setClabe(
+						StringTrim.trimAndRemoveDiacriticalMarks(entity.getEmployeePayroll().getClabe()));
 			    if (!entity.getEmployeePayroll().getClabe().equals("") 
 			    	&& repository.countByClabeWithAnotherEmployee(entity.getEmployeePayroll().getClabe(), id) > 0) {
-					Map<String, String> errors = new HashMap<>();
-					errors.put("employeePayroll_clabe", "El campo Clabe esta asociado a otro perfil ingrese uno nuevo");
-					return errors;
+			    	return setMessage("employeePayroll_clabe", "El campo Clabe esta asociado a otro perfil ingrese uno nuevo");
 			    }
 			}
 		}
 		
 		return Collections.emptyMap();
+	}
+	
+	private Map<String, String> setMessage(String key, String message) {
+		Map<String, String> errors = new HashMap<>();
+		errors.put(key, message);
+		return errors;
 	}
 
 }
