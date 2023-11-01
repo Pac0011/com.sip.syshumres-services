@@ -16,6 +16,8 @@ import com.sip.syshumres_services.common.CommonService;
 
 public interface ProspectProfileService extends CommonService<ProspectProfile> {
 	
+	public void configProspectProfileService(int sizeHashDirUploadEmployee);
+	
 	public ProspectProfile save(ProspectProfile entity, BranchOffice branchOffice, ProspectStatus status);
 	
 	public EmployeeProfile saveNewHire(ProspectProfile entity, String employeeNumber, ProspectStatus status, EmployeeStatus statusE);

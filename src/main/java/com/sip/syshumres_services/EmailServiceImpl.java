@@ -5,7 +5,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -18,15 +17,19 @@ public class EmailServiceImpl implements EmailService {
 	
     private final JavaMailSender mailSender;
 	
-	@Value("${EMAIL.FROM}")
 	private String from;
 	
-	@Value("${LINK.EMAIL.PASSWORD.RECOVERY}")
 	private String linkRecovery;
 	
 	@Autowired
 	public EmailServiceImpl(JavaMailSender mailSender) {
 		this.mailSender = mailSender;
+	}
+	
+	@Override
+	public void configEmailService(String from, String linkRecovery) {
+		this.from = from;
+		this.linkRecovery = linkRecovery;
 	}
 
 	@Override

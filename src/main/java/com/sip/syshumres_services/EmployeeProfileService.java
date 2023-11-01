@@ -23,6 +23,9 @@ import com.sip.syshumres_services.common.CommonService;
 
 public interface EmployeeProfileService extends CommonService<EmployeeProfile> {
 	
+	public void configBasePaths(String uploadBaseDocuments, String uploadDocuments
+			, String urlDocuments, String uploadFormatsAllow, int sizeEmployeeNumber);
+	
 	public String generateEmployeeNumber(EmployeePosition employeePosition);
 	
 	public Page<EmployeeProfile> listEmployeeType(Long idBranchOffice, Long idEmployeeType, Pageable pageable);

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,19 +31,11 @@ public class EmployeeDocumentServiceImpl extends CommonServiceImpl<EmployeeDocum
 	private final EmployeeProfileRepository repositoryE;
 	
 	private final HiringDocumentsRepository repositoryH;
-	
-	@Value("${UPLOAD.BASE.DOCUMENTS.EMPLOYEES}")
-	private String uploadBaseDocuments;
-	
-	//Tiene que haber un espacio en el el signo $ y el {, para uqe funcione (SINO MARCA ERROR QUE NO ENCUENTRA LA PROPIEDAD)
-	@Value("${UPLOAD.PATH.DOCUMENTS.EMPLOYEES}")
+		
 	private String uploadDocuments;
 	
-	@Value("${URL.DOCUMENTS.EMPLOYEES}")
 	private String urlDocuments;
 	
-	//@Value("#{'${UPLOAD.LIST.FORMATS.ALLOW}'.split(',')}") 
-	@Value("${UPLOAD.LIST.FORMATS.ALLOW}")
 	private String uploadFormatsAllow;
 	
 	@Autowired
@@ -53,6 +44,20 @@ public class EmployeeDocumentServiceImpl extends CommonServiceImpl<EmployeeDocum
 		super();
 		this.repositoryE = repositoryE;
 		this.repositoryH = repositoryH;
+	}
+	
+	@Override
+	public void configBasePaths(String uploadDocuments
+			, String urlDocuments, String uploadFormatsAllow) {
+		this.uploadDocuments = uploadDocuments;
+		this.urlDocuments = urlDocuments;
+		this.uploadFormatsAllow = uploadFormatsAllow;
+	}
+	
+	private boolean validBasePaths() {
+		return this.uploadDocuments != null && !this.uploadDocuments.equals("")
+				&& this.urlDocuments != null && !this.urlDocuments.equals("")
+				&& this.uploadFormatsAllow != null && !this.uploadFormatsAllow.equals("");
 	}
 
 	@Override
@@ -67,6 +72,9 @@ public class EmployeeDocumentServiceImpl extends CommonServiceImpl<EmployeeDocum
 			throws UploadFormatsAllowException, EntityIdNotFoundException
 			, TypeHiringDocumentNotExistException, CreateRegisterException
 			, IOException, UploadFileException {
+		if (!validBasePaths()) {
+			throw new UploadFileException("Hace falta configurar los basePaths");
+		}
 		EmployeeDocument doc = null;
 		StringBuilder urlFile = new StringBuilder(this.urlDocuments);
 		if (!fileUpload.isEmpty()) {

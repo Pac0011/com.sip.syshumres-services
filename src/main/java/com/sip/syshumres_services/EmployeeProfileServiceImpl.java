@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,23 +31,17 @@ import com.sip.syshumres_utils.UtilFile;
 
 
 @Service
-public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfile, EmployeeProfileRepository> implements EmployeeProfileService {
+public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfile, EmployeeProfileRepository> 
+	implements EmployeeProfileService {
 
-	@Value("${UPLOAD.BASE.DOCUMENTS.EMPLOYEES}")
 	private String uploadBaseDocuments;
 	
-	//Tiene que haber un espacio en el el signo $ y el {, para uqe funcione (SINO MARCA ERROR QUE NO ENCUENTRA LA PROPIEDAD)
-	@Value("${UPLOAD.PATH.DOCUMENTS.EMPLOYEES}")
 	private String uploadDocuments;
 	
-	@Value("${URL.DOCUMENTS.EMPLOYEES}")
 	private String urlDocuments;
 	
-	//@Value("#{'${UPLOAD.LIST.FORMATS.ALLOW}'.split(',')}") 
-	@Value("${UPLOAD.LIST.FORMATS.ALLOW}")
 	private String uploadFormatsAllow;
 	
-	@Value("${SIZE.EMPLOYEE.NUMBER}")
 	private int sizeEmployeeNumber;
 	
 	private static final String NM_FILECURP = "fileCurp";
@@ -57,6 +50,16 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 	private static final String NM_RIGHTPHOTO = "rightPhoto";
 	private static final String NM_COVIDCERT = "covidCertificate";
 	private static final String NM_BANKACCOUNT = "bankAccountFile";
+	
+	@Override
+	public void configBasePaths(String uploadBaseDocuments, String uploadDocuments
+			, String urlDocuments, String uploadFormatsAllow, int sizeEmployeeNumber) {
+		this.uploadBaseDocuments = uploadBaseDocuments;
+		this.uploadDocuments = uploadDocuments;
+		this.urlDocuments = urlDocuments;
+		this.uploadFormatsAllow = uploadFormatsAllow;
+		this.sizeEmployeeNumber = sizeEmployeeNumber;
+	}
 	
 	@Override
 	public String generateEmployeeNumber(EmployeePosition employeePosition) {

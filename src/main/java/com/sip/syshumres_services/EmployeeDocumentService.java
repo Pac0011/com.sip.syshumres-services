@@ -16,6 +16,9 @@ import com.sip.syshumres_services.common.CommonService;
 
 public interface EmployeeDocumentService extends CommonService<EmployeeDocument> {
 	
+	public void configBasePaths(String uploadDocuments
+			, String urlDocuments, String uploadFormatsAllow);
+	
 	public Optional<EmployeeDocument> findByEmployeeProfileAndHiringDocument(Long idEmployeeProfile, Long idHiringDocuments);
 	
 	public String uploadFile(Long idEmployeeProfile, Long idHiringDocument, MultipartFile fileUpload) 
