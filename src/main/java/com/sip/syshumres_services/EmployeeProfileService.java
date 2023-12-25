@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.sip.syshumres_entities.EmployeePosition;
 import com.sip.syshumres_entities.EmployeeProfile;
-import com.sip.syshumres_entities.User;
+import com.sip.syshumres_entities.dtos.UserTokenExtraDTO;
 import com.sip.syshumres_exceptions.CreateRegisterException;
 import com.sip.syshumres_exceptions.EntityIdNotFoundException;
 import com.sip.syshumres_exceptions.UnknownOptionException;
@@ -27,10 +27,8 @@ public interface EmployeeProfileService extends CommonService<EmployeeProfile> {
 			, String urlDocuments, String uploadFormatsAllow, int sizeEmployeeNumber);
 	
 	public String generateEmployeeNumber(EmployeePosition employeePosition);
-	
-	public Page<EmployeeProfile> listEmployeeType(Long idBranchOffice, Long idEmployeeType, Pageable pageable);
-	
-	public Page<EmployeeProfile> listEmployeeType(Long idEmployeeType, Pageable pageable);
+		
+	public Page<EmployeeProfile> listEmployeeType(Long idEmployeeType, Pageable pageable, UserTokenExtraDTO userToken);
 	
 	public long countByEmailWithAnotherEmployee(String email, Long id);
 	
@@ -54,7 +52,7 @@ public interface EmployeeProfileService extends CommonService<EmployeeProfile> {
 	
 	public Page<EmployeeProfile> findByFullNameLikeOrRfcLikeOrCurpLikeOr(Long idEmployeeType, String text, Pageable pageable);
 	
-	public Page<EmployeeProfile> findByFilterSession(String filter, User user, Long idEmployeeType, Pageable pageable);
+	public Page<EmployeeProfile> findByFilterSession(String filter, UserTokenExtraDTO userToken, Long idEmployeeType, Pageable pageable);
 	
 	public String uploadFile(Long id, String nameInput, MultipartFile fileUpload) 
 			throws EntityIdNotFoundException, UploadFormatsAllowException, UploadFileException, 

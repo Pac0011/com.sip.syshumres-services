@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.sip.syshumres_entities.EmployeePosition;
 import com.sip.syshumres_entities.EmployeeProfile;
-import com.sip.syshumres_entities.User;
+import com.sip.syshumres_entities.dtos.UserTokenExtraDTO;
 import com.sip.syshumres_exceptions.CreateRegisterException;
 import com.sip.syshumres_exceptions.EntityIdNotFoundException;
 import com.sip.syshumres_exceptions.UnknownOptionException;
@@ -75,14 +75,11 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 	
 	@Override
 	@Transactional(readOnly = true)
-	public Page<EmployeeProfile> listEmployeeType(Long idBranchOffice, Long id, Pageable pageable) {
-		return repository.listEmployeeType(idBranchOffice, id, pageable);
-	}
-	
-	@Override
-	@Transactional(readOnly = true)
-	public Page<EmployeeProfile> listEmployeeType(Long id, Pageable pageable) {
-		return repository.listEmployeeType(id, pageable);
+	public Page<EmployeeProfile> listEmployeeType(Long id, Pageable pageable, UserTokenExtraDTO userToken) {
+		if (userToken.isSeeAllBranchs()) {
+			return repository.listEmployeeType(id, pageable);
+		}
+		return repository.listEmployeeType(userToken.getIdBrachOffice(), id, pageable);
 	}
 	
 	@Override
@@ -156,22 +153,22 @@ public class EmployeeProfileServiceImpl extends CommonServiceImpl<EmployeeProfil
 	
 	@Transactional(readOnly = true)
 	@Override
-	public Page<EmployeeProfile> findByFilterSession(String filter, User user, Long idEmployeeType, Pageable pageable) {
+	public Page<EmployeeProfile> findByFilterSession(String filter, UserTokenExtraDTO userToken, Long idEmployeeType, Pageable pageable) {
 		Page<EmployeeProfile> entities = null;
 		
 		if (filter != null && !filter.equals("")) {
-			if (user.isSeeAllBranchs()) {
+			if (userToken.isSeeAllBranchs()) {
 				entities = repository.findByFullNameLikeOrRfcLikeOrCurpLikeOr(idEmployeeType, 
 						filter, pageable);
 			} else {
-			    entities = repository.findByFullNameLikeOrRfcLikeOrCurpLikeOr(user.getBranchOffice().getId(), 
+			    entities = repository.findByFullNameLikeOrRfcLikeOrCurpLikeOr(userToken.getIdBrachOffice(), 
 			    		idEmployeeType, filter, pageable);
 			}
 		} else {
-			if (user.isSeeAllBranchs()) {
+			if (userToken.isSeeAllBranchs()) {
 			    entities = repository.listEmployeeType(idEmployeeType, pageable);
 			} else {
-				entities = repository.listEmployeeType(user.getBranchOffice().getId(), 
+				entities = repository.listEmployeeType(userToken.getIdBrachOffice(), 
 						idEmployeeType, pageable);
 			}
 		} 
